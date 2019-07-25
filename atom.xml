@@ -5,9 +5,9 @@
   
   <link href="/atom.xml" rel="self"/>
   
-  <link href="http://yoursite.com/"/>
+  <link href="http://blog.ColloidalZhao.com/"/>
   <updated>2019-07-25T06:22:58.713Z</updated>
-  <id>http://yoursite.com/</id>
+  <id>http://blog.ColloidalZhao.com/</id>
   
   <author>
     <name>胶粒</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>Hello World!!!</title>
-    <link href="http://yoursite.com/post/HelloWorld!!!/"/>
-    <id>http://yoursite.com/post/HelloWorld!!!/</id>
+    <link href="http://blog.ColloidalZhao.com/post/HelloWorld!!!/"/>
+    <id>http://blog.ColloidalZhao.com/post/HelloWorld!!!/</id>
     <published>2019-07-23T10:54:05.508Z</published>
     <updated>2019-07-25T06:22:58.713Z</updated>
     
@@ -35,10 +35,10 @@
     
     </summary>
     
-      <category term="All" scheme="http://yoursite.com/categories/All/"/>
+      <category term="All" scheme="http://blog.ColloidalZhao.com/categories/All/"/>
     
     
-      <category term="日常吹水" scheme="http://yoursite.com/tags/%E6%97%A5%E5%B8%B8%E5%90%B9%E6%B0%B4/"/>
+      <category term="日常吹水" scheme="http://blog.ColloidalZhao.com/tags/%E6%97%A5%E5%B8%B8%E5%90%B9%E6%B0%B4/"/>
     
   </entry>
   
