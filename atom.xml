@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-07-23T10:54:05.508Z</updated>
+  <updated>2019-07-25T06:22:58.713Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -17,23 +17,28 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Hello World</title>
-    <link href="http://yoursite.com/post/hello-world/"/>
-    <id>http://yoursite.com/post/hello-world/</id>
+    <title>Hello World!!!</title>
+    <link href="http://yoursite.com/post/HelloWorld!!!/"/>
+    <id>http://yoursite.com/post/HelloWorld!!!/</id>
     <published>2019-07-23T10:54:05.508Z</published>
-    <updated>2019-07-23T10:54:05.508Z</updated>
+    <updated>2019-07-25T06:22:58.713Z</updated>
     
-    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p><h2 id="Quick-Start">Quick Start<a href="post/hello-world#Quick-Start"></a></h2><h3 id="Create-a-new-post">Create a new post<a href="post/hello-world#Create-a-new-post"></a></h3><figure class="highlight bash"><div><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></div></figure><p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p><h3 id="Run-server">Run server<a href="post/hello-world#Run-server"></a></h3><figure class="highlight bash"><div><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></div></figure><p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p><h3 id="Generate-static-files">Generate static files<a href="post/hello-world#Generate-static-files"></a></h3><figure class="highlight bash"><div><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></div></figure><p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p><h3 id="Deploy-to-remote-sites">Deploy to remote sites<a href="post/hello-world#Deploy-to-remote-sites"></a></h3><figure class="highlight bash"><div><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></div></figure><p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>]]></content>
+    <content type="html"><![CDATA[<h2 id="搭建的原因">搭建的原因<a href="post/HelloWorld!!!#搭建的原因"></a></h2><p>  其实在刚上大学的时候我就想着要搭博客，那时遇到的一些前辈也强调要搭好一个个人博客的重要性。</p><p>  不过因为咕性难抑，一直磨蹭到要升大二才搞，现在想想真的是浪费之前的时间了，大一萌新时期的问题记录和技术笔记是多么有<del>黑历史</del>价值啊。</p><h2 id="搭建时遇到的问题">搭建时遇到的问题<a href="post/HelloWorld!!!#搭建时遇到的问题"></a></h2><p>  <del>搭建过程中遇到的最大问题就是域名的选择了吧hhhhhhhh原本钟意的域名被注册之类的只能想另外的域名。</del></p><p>  搭建过程中卡住我的是主题自定义部分吧，虽然理解过后更改还是很方便的。所以在这里赞美各位前辈们上传的各种主题，感谢ikeq大佬制作的inside主题模板与Elmore Cheng大佬的改进。</p><h2 id="搭建完毕">搭建完毕<a href="post/HelloWorld!!!#搭建完毕"></a></h2><p>  博客刚刚搭建完，挺多东西其实都还没填充进去，希望日后我的博客可以越来越充实吧hhhhhhh</p>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.
+        &lt;h2 id=&quot;搭建的原因&quot;&gt;搭建的原因&lt;a href=&quot;post/HelloWorld!!!#搭建的原因&quot;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;  其实在刚上大学的时候我就想着要搭博客，那时遇到的一些前辈也强调要搭好一个个人博客的重要性。&lt;/p&gt;
+&lt;p&gt;  不过因为咕性难抑，一直磨蹭到要升
       
     
     </summary>
     
+      <category term="All" scheme="http://yoursite.com/categories/All/"/>
+    
+    
+      <category term="日常吹水" scheme="http://yoursite.com/tags/%E6%97%A5%E5%B8%B8%E5%90%B9%E6%B0%B4/"/>
     
   </entry>
   
