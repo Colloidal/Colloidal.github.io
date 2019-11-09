@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>胶粒&#39;s Blog</title>
+  <title>胶粒 | Blog</title>
   
   
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.ColloidalZhao.com/"/>
-  <updated>2019-07-25T06:42:40.585Z</updated>
+  <updated>2019-11-09T21:38:23.658Z</updated>
   <id>http://blog.ColloidalZhao.com/</id>
   
   <author>
@@ -17,11 +17,37 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>关于Unity3D脚本的生命周期函数以及协程</title>
+    <link href="http://blog.ColloidalZhao.com/post/Unity_Lifecycle_Coroutine/"/>
+    <id>http://blog.ColloidalZhao.com/post/Unity_Lifecycle_Coroutine/</id>
+    <published>2019-11-09T09:37:29.337Z</published>
+    <updated>2019-11-09T21:38:23.658Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="关于Unity3D脚本的生命周期函数以及协程">关于Unity3D脚本的生命周期函数以及协程<a href="post/Unity_Lifecycle_Coroutine#关于Unity3D脚本的生命周期函数以及协程"></a></h1><blockquote><hr></blockquote><hr><blockquote><p>记得招某在刚开始尝试自己学着做游戏时，只能按理所当然的想法去理解Unity中生命周期函数的运行。</p><p>同时对于协程，也只是肤浅的认为是一个”可以被控制的update函数”。</p><p>后来随着自己学习的深入，<br>招某认为应该回过头来认真认识一下这个来自Unity的方便工具了。<br><del>并且也是时候尝试更新下blog了!!!</del></p><blockquote><hr><p>在这篇文章中，您可以了解：</p></blockquote><p>Unity3D的生命周期函数的原理与运行规律；</p><blockquote></blockquote><p>理解协程的存在与使用；</p><blockquote></blockquote><p>利用协程进行一些简单功能的实现。</p><blockquote><hr></blockquote><hr></blockquote><h2 id="关于Unity的生命周期函数-Lifecycle">关于Unity的生命周期函数(Lifecycle)<a href="post/Unity_Lifecycle_Coroutine#关于Unity的生命周期函数-Lifecycle"></a></h2><blockquote><p>这部分内容十分简单，考虑到各位已经都上手尝试过学习Unity，故此处我将只简单整理一下一整个生命周期函数的前后顺序以及一些可能会踩到的坑。</p></blockquote><h3 id="首次加载-First-Scene-load">首次加载(First Scene load)<a href="post/Unity_Lifecycle_Coroutine#首次加载-First-Scene-load"></a></h3><ul><li>Awake()：相信各位都知道，awake是场景中最先调用的函数，那么，其究竟有多早呢？其又与Start()有何区别呢?</li></ul><blockquote><p>我们可以做个小实验：当gameobject运行前为inactive时，以及该script为disable时，还有完全实例化时分别输出console信息。</p></blockquote><h3 id="更新顺序-Update-Order">更新顺序(Update Order)<a href="post/Unity_Lifecycle_Coroutine#更新顺序-Update-Order"></a></h3><ul><li>FixedUpdate()： FixedUpdate通常比Update()更频繁地被调用。如果帧速率低，则可以每帧多次调用它；如果帧速率高，则可以在帧之间根本不调用它。</li></ul><blockquote><p>所有物理计算和更新都在FixedUpdate之后立即进行。在FixedUpdate中应用运动计算时，无需将值乘以Time.deltaTime。这是因为在可靠的计时器上调用了FixedUpdate，而与帧速率无关。</p></blockquote><ul><li><p>Update()： 每帧渲染完毕后调用一次更新。</p></li><li><p>LateUpdate()： Update()完成后，每帧调用一次LateUpdate。LateUpdate开始时，Update中执行的所有计算都将完成。</p></li></ul><blockquote><p>LateUpdate的常见用法是后续的第三人称相机。如果使角色移动并在Update内部旋转，则可以在LateUpdate中执行所有摄像机的移动和旋转计算。这将确保角色在摄像机跟踪其位置之前已完全移动。</p></blockquote><h3 id="协程-Coroutine">协程(Coroutine)<a href="post/Unity_Lifecycle_Coroutine#协程-Coroutine"></a></h3><ul><li>根据其被挂起的条件不同，会有不同的执行顺序。您也可以看到，协程可以很方便的在生命周期函数中的许多位置重新唤醒，方便我们执行代码，具体的我们会在后面细讲。</li></ul><p>##关于协程(Coroutine)</p><h3 id="什么是协程">什么是协程?<a href="post/Unity_Lifecycle_Coroutine#什么是协程"></a></h3><p><del>“可以被控制的Update函数”!!!</del></p><p>既然我们讨论的是Unity里的协程，因此我们先来康康Unity官方的对协程的解释吧— —</p><blockquote><p>A coroutine is a function that can <strong>suspend its execution</strong> until the given YieldInstruction finishes.</p><blockquote><p>协程是一个可以<strong>暂停执行</strong>的函数，并且可以被挂起直到给定的yield指令完成(后再被唤醒并运行其后续的工作内容）.</p></blockquote></blockquote><p>从官方的解释您可以看出，协程是在主线程中的一个函数，虽然它看起来独立于主线程在进行调用，但其实并不是一个线程。</p><p>协程可以视作是部分执行的函数，并假定在适当的条件得到满足，在未来的某一时刻将被恢复，直到它的工作完成。</p><p>因此您在使用协程时不需要担心多线程同步或锁之类的问题，同时协程在性能上、相比于一般函数几乎没有更多的开销。因此在使用协程时，您只需要关注其应该在什么情况下挂起，又在什么情况下重新被唤醒即可。</p><p>而协程的部分执行使协程可以很好的控制跨越一定帧数后执行的行为，在开发游戏时，会给您带来极大的便利，也会使您的代码看上去会更加优雅<strong>;D</strong></p><h3 id="协程在脚本里是怎么存在的">协程在脚本里是怎么存在的?<a href="post/Unity_Lifecycle_Coroutine#协程在脚本里是怎么存在的"></a></h3><p>同样的，我们先来问问神奇的官方文档吧!</p><blockquote><p>Normal coroutine updates are run after the Update function returns. A coroutine is a function that can suspend its execution (yield) until the given YieldInstruction finishes.</p><p>协程(Coroutine)的运行是在生命周期函数(Lifecycle)中的Update函数后.</p></blockquote><p>然后让我们来康康Unity内部对协程的实现是如何的吧!</p><pre><code>public interface IEnumerator{    object Current { get; }    bool MoveNext();    void Reset();}public interface IEnumerable{    [DispId(-4)]    IEnumerator GetEnumerator();}</code></pre><p>协程函数的实现说到底内部是一个IEnumerator（迭代器），IEnumerator 接口中有两个方法 Current 和 MoveNext()。</p><p>因此协程函数遇到yield return时，将会记录此次位置并开始迭代器中的MoveNext()的运行，而Unity将在Update()每帧结束后都询问每个协程是否满足条件，如果MoveNext()返回true，即此时已满足了特定条件，Unity将让协程函数从上次结束位置继续执行。</p><h3 id="协程的使用流程主要是怎么样的">协程的使用流程主要是怎么样的?<a href="post/Unity_Lifecycle_Coroutine#协程的使用流程主要是怎么样的"></a></h3><h4 id="启动协程">启动协程<a href="post/Unity_Lifecycle_Coroutine#启动协程"></a></h4><p>通过MonoBehaviour提供的StartCoroutine方法来实现启动协同程序。</p><pre><code>StartCoroutine(IEnumerator routine);    //通过函数开始一个协程StartCoroutine (methodName:string, value : object = null);        //通过函数名开始一个协程</code></pre><p>您可以在项目中的CoroutineTestScene进行验证，我们可以得到以下结论：</p><div class="article-bounded"><div class="article-table"><table><thead><tr><th>所用方法</th><th>方便之处</th><th>不便之处</th></tr></thead><tbody><tr><td>通过函数开始</td><td>可以传入多个参数</td><td>不可单独停止此协程</td></tr><tr><td>通过函数名开始`</td><td>可以单独停止此协程</td><td>至多传入一个参数</td></tr></tbody></table></div></div><blockquote><p>不过，其实吧，如果想要停止对应的协程的话，大可以设参来记录指定协程后在需要的时候来停止噢。</p><p>这种方法均适用于上述两个开始协程的情况，所以这运用起来差别也不是很大<strong>:P</strong> <del>又说了句废话</del></p></blockquote><h4 id="停止协程">停止协程<a href="post/Unity_Lifecycle_Coroutine#停止协程"></a></h4><pre><code>StopCoroutine(string methodName);    //按函数名停止该脚本中指定协程StopCoroutine(Coroutine method);    //按参数停止该脚本中指定协程StopAllCoroutine();        //停止该脚本中所有协程</code></pre><p>StopCoroutine()一般只能靠函数名与指定的Coroutine参数来停止，而StopAllCoroutine()则可以一次性全部关掉。</p><p>当然，在unity3D中，一个脚本是否继续运行是需要在场景中实例化的，因此如果将其挂载的gameobject进行setActive(false)时也可以直接终止该脚本的所有协同程序，并且之后setActive(true)也并不会使协程自动再启动。</p><h4 id="挂起协程">挂起协程<a href="post/Unity_Lifecycle_Coroutine#挂起协程"></a></h4><p>一个协程收到特定指令后会被挂起(暂停执行)，然后其将等待某个条件满足后才继续执行其后续代码。</p><p>在生命周期函数中我们已经讨论过，这个条件满足与否的判断是发生在LateUpdate()后的，即在渲染的每一帧后，Unity都会对这个条件发起询问。</p><p>这个条件的类型有以下类型：</p><pre><code>① null -&gt; 等待所有类型的Update()完成后的下一帧执行。③ WaitForFixedUpdate -&gt; 等待物理周期循环完成后执行④ WaitForSeconds -&gt; 等待给定的时间周期过完后执行④ WWW -&gt; 等待www的网络请求完成后执行。⑤ StartCoroutine -&gt; 开始一个协程并等待此协程完毕后执行。</code></pre><blockquote><p>说起来，招某之前在用 WaitForSeconds()遇到一个坑，<br>就是在想要暂停场景中所有对象的运行但不暂停一个做渐变效果的协程时，我调整了Time.timeScale，此时也会影响WaitForSeconds()的判断。</p><p>即当Time.timeScale = 0f 时，yield return new WaitForSecond(int second) 将永远不会满足噢。</p></blockquote><h3 id="协程的运用案例">协程的运用案例<a href="post/Unity_Lifecycle_Coroutine#协程的运用案例"></a></h3><h4 id="一个渐变效果的简单实现">一个渐变效果的简单实现<a href="post/Unity_Lifecycle_Coroutine#一个渐变效果的简单实现"></a></h4><p>本案例主要关注于循环与协程的一同使用，可以实现逐渐改变的效果。</p><pre><code>IEnumerator Fade(){    isFading = true;    float AlphaValue = m_Renderer.material.color.a;    while (AlphaValue &gt; 0f)    {        AlphaValue -= 0.01f;        m_Renderer.material.color = new Color(m_Renderer.material.color.r, m_Renderer.material.color.g, m_Renderer.material.color.b, AlphaValue);        yield return null;    }}IEnumerator Show(){    isFading = false;    float AlphaValue = m_Renderer.material.color.a;    while (AlphaValue &lt; 1f)    {        AlphaValue += 0.01f;        m_Renderer.material.color = new Color(m_Renderer.material.color.r, m_Renderer.material.color.g, m_Renderer.material.color.b, AlphaValue);        yield return null;    }}</code></pre><p>您可以在本配套项目中的GradualChangeScene中查看效果。</p><h4 id="一个无聊的自动播放对话器">一个无聊的自动播放对话器<a href="post/Unity_Lifecycle_Coroutine#一个无聊的自动播放对话器"></a></h4><p>本案例主要关注于多个协程的配合，可以做到随时开始独立计时的效果。</p><pre><code>IEnumerator WaitForTime(){    yield return new WaitForSeconds(waitingTime);}IEnumerator Speaking(){    isSpeaking = !isSpeaking;    yield return WaitForTime();    text.text = (&quot;现在已经过了&quot; + waitingTime + &quot;s惹，我可以说话了。&quot;);    yield return WaitForTime();    text.text = (&quot;又过了&quot; + waitingTime + &quot;s，我累了，我不说话惹。&quot;);    yield return WaitForTime();    text.text = (&quot;当然如果您还想听我说话的话，您可以再按一次O键噢(小声&quot;);    isSpeaking = !isSpeaking;}</code></pre><p>您可以在项目中的变AutoDialogueScene中查看效果。</p><h4 id="一个愚蠢的自动巡逻实现">一个愚蠢的自动巡逻实现<a href="post/Unity_Lifecycle_Coroutine#一个愚蠢的自动巡逻实现"></a></h4><p>本案例主要关注于协程的嵌套，可以做到定时循环的效果。<br>    IEnumerator MoveOnPath()<br>    {<br>        do<br>        {<br>            foreach (var point in path)<br>                yield return StartCoroutine(MoveToPosition(point));<br>        }<br>        while (true);<br>    }</p><pre><code>IEnumerator MoveToPosition(Vector3 target){    while (transform.position != target)    {        transform.position = Vector3.MoveTowards(transform.position, target, moveSpeed * Time.deltaTime);        yield return 0;    }}</code></pre><p>您可以在项目中的变AutoPatrolScene中查看效果。</p><blockquote><hr><p>本文就分享到这啦<strong>xD</strong></p><p>因为招某还是超菜一人，若有哪处讲错的话，欢迎您点点左边的联系方式来告诉招某噢!!!</p><p>感谢您的阅读<strong>;D</strong></p><blockquote><hr><p>参考资料</p><p><a href="https://docs.unity3d.com/Manual/ExecutionOrder.html" target="_blank" rel="noopener">生命周期函数(官方文档)</a></p><p><a href="https://docs.unity3d.com/ScriptReference/Coroutine.html" target="_blank" rel="noopener">协程函数(官方文档)</a></p><p><a href="https://www.iteye.com/blog/dsqiu-2029701" target="_blank" rel="noopener">DSQiu佬的协程原理剖析</a></p><hr></blockquote><hr></blockquote>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;关于Unity3D脚本的生命周期函数以及协程&quot;&gt;关于Unity3D脚本的生命周期函数以及协程&lt;a href=&quot;post/Unity_Lifecycle_Coroutine#关于Unity3D脚本的生命周期函数以及协程&quot;&gt;&lt;/a&gt;&lt;/h1&gt;&lt;blockquote&gt;
+
+      
+    
+    </summary>
+    
+      <category term="Unity3D" scheme="http://blog.ColloidalZhao.com/categories/Unity3D/"/>
+    
+    
+      <category term="回顾思考 丢人分享" scheme="http://blog.ColloidalZhao.com/tags/%E5%9B%9E%E9%A1%BE%E6%80%9D%E8%80%83-%E4%B8%A2%E4%BA%BA%E5%88%86%E4%BA%AB/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Hello World!!!</title>
     <link href="http://blog.ColloidalZhao.com/post/HelloWorld!!!/"/>
     <id>http://blog.ColloidalZhao.com/post/HelloWorld!!!/</id>
     <published>2019-07-23T10:54:05.508Z</published>
-    <updated>2019-07-25T06:42:40.585Z</updated>
+    <updated>2019-07-26T16:17:06.355Z</updated>
     
     <content type="html"><![CDATA[<h2 id="搭建的原因">搭建的原因<a href="post/HelloWorld!!!#搭建的原因"></a></h2><p>  其实在刚上大学的时候我就想着要搭博客，那时遇到的一些前辈也强调要搭好一个个人博客的重要性。</p><p>  不过因为咕性难抑，一直磨蹭到要升大二才搞，现在想想真的是浪费之前的时间了，大一萌新时期的问题记录和技术笔记是多么有<del>黑历史</del>价值啊。</p><h2 id="搭建时遇到的问题">搭建时遇到的问题<a href="post/HelloWorld!!!#搭建时遇到的问题"></a></h2><p>  <del>搭建过程中遇到的最大问题就是域名的选择了吧hhhhhhhh原本钟意的域名被注册之类的只能想另外的域名。</del></p><p>  搭建过程中卡住我的是主题自定义部分吧，虽然理解过后更改还是很方便的。所以在这里赞美各位前辈们上传的各种主题，感谢Elmore Cheng大佬制作的inside主题模板。</p><h2 id="搭建完毕">搭建完毕<a href="post/HelloWorld!!!#搭建完毕"></a></h2><p>  博客刚刚搭建完，挺多东西其实都还没填充进去，希望日后我的博客可以越来越充实吧hhhhhhh</p>]]></content>
     
@@ -35,7 +61,7 @@
     
     </summary>
     
-      <category term="All" scheme="http://blog.ColloidalZhao.com/categories/All/"/>
+      <category term="技术无关" scheme="http://blog.ColloidalZhao.com/categories/%E6%8A%80%E6%9C%AF%E6%97%A0%E5%85%B3/"/>
     
     
       <category term="日常吹水" scheme="http://blog.ColloidalZhao.com/tags/%E6%97%A5%E5%B8%B8%E5%90%B9%E6%B0%B4/"/>
